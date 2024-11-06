@@ -1,5 +1,5 @@
 input_data:
-  file: "../data/raw/raw_data_file.csv"
+  productivity_file:  '../data/raw/Extended_Employee_Performance_and_Productivity_Data.csv'
 
 output_data:
-  file: "../data/clean/cleaned_data_file.csv"
+  productivity_file: '../data/clean/df_cleaned.csv'
