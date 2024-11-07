@@ -352,3 +352,37 @@ def plot_scores_by_work_type(df_cleaned):
     
     # Show the plot
     plt.show()
+
+def heat_map(df_cleaned):
+    """
+    Plots a heatmap showing the correlation between numerical columns in the DataFrame.
+
+    Parameters:
+    df_cleaned (pandas.DataFrame): The DataFrame containing the data.
+
+    Returns:
+    pandas.DataFrame: The correlation matrix of the numerical columns.
+
+    Examples:
+    correlation_matrix = heat_map(df_cleaned)
+    print(correlation_matrix)
+
+    Notes:
+    The function saves the heatmap to the figures folder.
+    
+    """
+    numerical_df = df_cleaned.select_dtypes(include='number')
+
+    # Calculate the correlation matrix for numerical columns
+    correlation_matrix = numerical_df.corr()
+
+    # Plot the heatmap
+    plt.figure(figsize=(12, 8))  # Adjust the figure size as needed
+    sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+    plt.title("Correlation Heatmap of Numerical Values")
+
+    #save the plot
+    plt.savefig("../figures/heat_map.jpeg", format="jpeg", dpi=300)
+
+    #display the plot
+    plt.show()
