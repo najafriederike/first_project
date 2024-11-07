@@ -166,11 +166,13 @@ def plot_work_type_distribution(df_cleaned, work_type):
     plt.figure(figsize=(6, 6))
     plt.pie(value_counts, labels=value_counts.index, autopct='%1.1f%%', startangle=140, wedgeprops={'width': 0.3})
     plt.title(f"Distribution of {'Work Type'.capitalize()}")
-    plt.show()
 
     #saves figure
-    plt.savefig("../figures/distribution_of_work_type.jpeg", format="jpeg")
+    plt.savefig("../figures/distribution_of_work_type.jpeg", format="jpeg", dpi=300)
 
+    #displays figure
+    plt.show()
+    
     # Return the counts
     return value_counts
 
