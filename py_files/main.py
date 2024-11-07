@@ -4,7 +4,8 @@ import seaborn as sns
 import numpy as np
 import yaml
 
-from functions import cleaning_productivity_data, describe_work_type_stats, plot_work_type_distribution, plot_stacked_work_and_overtime_hours, calculate_avg_median_scores_by_work_type, plot_average_scores_by_work_type, plot_scores_by_work_type
+from functions import cleaning_productivity_data, describe_work_type_stats, plot_work_type_distribution, plot_stacked_work_and_overtime_hours, calculate_avg_median_scores_by_work_type, plot_average_scores_by_work_type, plot_scores_by_work_type, df_mentalhealth_cleaning, satisfaction_mentalhealth, work_type_productivity, stress_worktype_rel, stress_jobrole_rel, descriptive_statistics_hours_worked
+
 
 #opens yaml file
 try:
@@ -51,3 +52,19 @@ plot_average_scores_by_work_type(df_cleaned, 'work_type')
 plot_scores_by_work_type(df_cleaned)
 
 heat_map(df_cleaned)
+
+
+# Mental Health Dataset
+
+
+df2_cleaned = df_mentalhealth_cleaning(df2)
+
+satisfaction_mentalhealth(df2_cleaned)
+
+work_type_productivity(df2_cleaned)
+
+stress_worktype_rel(df2_cleaned)
+
+stress_jobrole_rel(df2_cleaned)
+
+descriptive_statistics_hours_worked(df2_cleaned)
