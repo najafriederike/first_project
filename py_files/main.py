@@ -6,7 +6,6 @@ import yaml
 
 from functions import cleaning_productivity_data, describe_work_type_stats, plot_work_type_distribution, plot_stacked_work_and_overtime_hours, calculate_avg_median_scores_by_work_type, plot_average_scores_by_work_type, plot_scores_by_work_type, df_mentalhealth_cleaning, satisfaction_mentalhealth, work_type_productivity, stress_worktype_rel, stress_jobrole_rel, descriptive_statistics_hours_worked
 
-
 #opens yaml file
 try:
     with open("../config.yaml") as file:
@@ -19,6 +18,7 @@ df = pd.read_csv(config['input_data']['productivity_file'])
 
 df_cleaned = cleaning_productivity_data(df)
 
+#saves csv to yaml file directory
 df_cleaned.to_csv(config['output_data']['productivity_file'], index=False)
 
 describe_stats = describe_work_type_stats(df_cleaned)
