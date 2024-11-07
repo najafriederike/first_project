@@ -451,12 +451,12 @@ def df_mentalhealth_cleaning(df2):
 
 
 
-def satisfaction_mentalhealth():
-   """
-   This function returns one table and two barplots:
-   1. In the table we can see that people who are satisfied with remote work do receive slightly higher company support for remote work, and feel a little more socially isolated than people who feel unsatisfied with remote work (0.03 diff).
-   2. The first barplot tells us that satisfied remote workers do feel a little more socially isolated, although that can be interpreted as a tradeoff they are willing to assume.
-   3. The second barplot shows us people who are satisfied with remote work do receive more support from their company to work remotely, on average.
+def satisfaction_mentalhealth(df2_cleaned):
+    """
+    This function returns one table and two barplots:
+    1. In the table we can see that people who are satisfied with remote work do receive slightly higher company support for remote work, and feel a little more socially isolated than people who feel unsatisfied with remote work (0.03 diff).
+    2. The first barplot tells us that satisfied remote workers do feel a little more socially isolated, although that can be interpreted as a tradeoff they are willing to assume.
+    3. The second barplot shows us people who are satisfied with remote work do receive more support from their company to work remotely, on average.
    
    """
     remotework_satisfaction = df2_cleaned.groupby('satisfaction_with_remote_work')[['company_support_for_remote_work', 'social_isolation_rating']].mean()
@@ -514,14 +514,14 @@ def work_type_productivity(df2_cleaned):
     The table shows us the hours worked per week are essentially the same for all categories. If we assume hours worked per week is the amount of hours needed to complete the work, which is a reasonable assumption in the tech sector, the table demonstrates employees have the same efficiency and productivity no matter the type of work (remote, hybrid, or inperson).
     """
     worktype_productivity = df2_cleaned.groupby('work_type')[['number_of_virtual_meetings', 'hours_worked_per_week']].mean()
-    print('work type and productivity: ', worklocation_productivity)
+    print('work type and productivity: ', worktype_productivity)
 
     # Calculate the total or average hours worked per work type
     hours_distribution = df2_cleaned.groupby('work_type')['hours_worked_per_week'].sum()
 
     # Create a pie chart
     plt.figure(figsize=(8, 8))
-    plt.pie(hours_distribution, labels=hours_distribution.index, autopct='%1.1f%%', startangle=90, colors=sb.color_palette('Purples'))
+    plt.pie(hours_distribution, labels=hours_distribution.index, autopct='%1.1f%%', startangle=90, colors=sns.color_palette('Purples'))
     plt.title('Proportion of Total Hours Worked by Work Type')
     plt.savefig("../figures/work_type_productivity_piechart.jpeg", format="jpeg", dpi=300)
     plt.show()

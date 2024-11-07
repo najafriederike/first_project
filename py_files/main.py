@@ -4,7 +4,7 @@ import seaborn as sns
 import numpy as np
 import yaml
 
-from functions import cleaning_productivity_data, describe_work_type_stats, plot_work_type_distribution, plot_stacked_work_and_overtime_hours, calculate_avg_median_scores_by_work_type, plot_average_scores_by_work_type, plot_scores_by_work_type, heat_map
+from functions import cleaning_productivity_data, describe_work_type_stats, plot_work_type_distribution, plot_stacked_work_and_overtime_hours, calculate_avg_median_scores_by_work_type, plot_average_scores_by_work_type, plot_scores_by_work_type, heat_map, df_mentalhealth_cleaning, satisfaction_mentalhealth, work_type_productivity, stress_worktype_rel, stress_jobrole_rel, descriptive_statistics_hours_worked
 
 #opens yaml file
 try:
@@ -15,11 +15,12 @@ except:
 
 #loads csv from yaml file directory
 df = pd.read_csv(config['input_data']['productivity_file'])
-
+df2 = pd.read_csv(config['input_data']['mental_health_file'])
 df_cleaned = cleaning_productivity_data(df)
-
+df2_cleaned = df_mentalhealth_cleaning(df2)
 #saves csv to yaml file directory
 df_cleaned.to_csv(config['output_data']['productivity_file'], index=False)
+df2_cleaned.to_csv(config['output_data']['mental_health_file'], index=False)
 
 describe_stats = describe_work_type_stats(df_cleaned)
 
