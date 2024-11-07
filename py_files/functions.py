@@ -386,3 +386,197 @@ def heat_map(df_cleaned):
 
     #display the plot
     plt.show()
+
+
+
+def df_mentalhealth_cleaning(df2):
+    
+    """
+    Cleans the Impact_of_Remote_Work_on_Mental_Health.csv DataFrame by 
+    performing multiple data preparation steps.
+    """
+    
+    #Rename the columns
+
+    df2.columns = df2.columns.str.lower()
+    
+    #Creating columns to reflect categories of rating columns
+    
+    def support_remote_grade(grade):
+        if grade <= 2:
+            return 'Low'
+        if grade == 3:
+            return 'Medium'
+        else:
+            return 'High'
+
+    df2['degree_of_remote_support'] = df2['company_support_for_remote_work'].apply(support_remote_grade)
+
+
+    def social_isolation(rating):
+        if rating <= 2:
+            return 'Low'
+        if rating == 3:
+            return 'Medium'
+        else:
+            return 'High'
+
+    df2['degree_of_social_isolation'] = df2['social_isolation_rating'].apply(social_isolation)
+
+
+    def degree_work_life_balance(grade):
+        if grade <= 2:
+            return 'Low'
+        if grade == 3:
+            return 'Medium'
+        else:
+            return 'High'
+
+    df2['degree_of_work-life_balance'] = df2['work_life_balance_rating'].apply(degree_work_life_balance)
+
+    #Dropping unneeded columns
+    df2 = df2.drop(columns = ['employee_id', 'industry', 'mental_health_condition', 'access_to_mental_health_resources','physical_activity', 'sleep_quality', 'region'])
+
+    #Renaming work_location column
+
+    df2.rename(columns={'work_location': 'work_type'}, inplace = True)
+
+    #Filtering for tech roles
+
+    df2_cleaned = df2[df2["job_role"].isin(['Data Scientist', 'Software Engineer', 'Project Manager'])]
+
+    return df2_cleaned
+
+
+
+def satisfaction_mentalhealth():
+   """
+   This function returns one table and two barplots:
+   1. In the table we can see that people who are satisfied with remote work do receive slightly higher company support for remote work, and feel a little more socially isolated than people who feel unsatisfied with remote work (0.03 diff).
+   2. The first barplot tells us that satisfied remote workers do feel a little more socially isolated, although that can be interpreted as a tradeoff they are willing to assume.
+   3. The second barplot shows us people who are satisfied with remote work do receive more support from their company to work remotely, on average.
+   
+   """
+    remotework_satisfaction = df2_cleaned.groupby('satisfaction_with_remote_work')[['company_support_for_remote_work', 'social_isolation_rating']].mean()
+    print('satisfaction level with remote work: ', remotework_satisfaction)
+
+    print('From the table avobe we can see that people who are satisfied with remote work do receive slightly higher company support for remote work, and feel a little more socially isolated than people who feel unsatisfied with remote work (0.03 diff).')
+
+       
+    # Grouping by satisfaction_with_remote_work and calculating the mean for social_isolation_rating
+    remotework_satisfaction = df2_cleaned.groupby('satisfaction_with_remote_work')['social_isolation_rating'].mean()
+
+    # Plotting a horizontal bar chart with elegant colors
+    remotework_satisfaction.plot(kind='barh', figsize=(8, 6), color=['#4C73A8', '#A9CBA7', '#F4A6C4'])  # Soft blue, green, and pink
+
+    # Adjusting the x-axis to zoom in more and make the differences visible
+    plt.xlim(remotework_satisfaction.min() - 0.5, remotework_satisfaction.max() + 0.5)  # Tightened range
+
+    # Adding labels and title
+    plt.xlabel('Average Social Isolation Rating', fontsize=12)
+    plt.ylabel('Satisfaction with Remote Work', fontsize=12)
+    plt.title('Social Isolation Rating by Satisfaction Level with Remote Work', fontsize=14)
+
+    # Display the plot
+    plt.tight_layout()
+    plt.savefig("../figures/satisfaction_mentalhealth_barplots_1.jpeg", format="jpeg", dpi=300)
+    plt.show()
+
+    print('This graph above tells us that satisfied remote workers do feel a little more socially isolated, although that can be interpreted as a tradeoff they are willing to assume.\n')
+
+    # Grouping by satisfaction_with_remote_work and calculating the mean for company_support_for_remote_work
+    remotework_satisfaction = df2_cleaned.groupby('satisfaction_with_remote_work')[['company_support_for_remote_work']].mean()
+
+    # Plotting a horizontal bar chart with elegant colors
+    remotework_satisfaction.plot(kind='barh', figsize=(8, 6), color=['#6B9AC4', '#77B7B1', '#D6A68C'])  # Elegant soft blue, teal, and taupe
+
+    # Adjusting the x-axis to zoom in more and make the differences visible
+    plt.xlim(remotework_satisfaction.min().min() - 0.5, remotework_satisfaction.max().max() + 0.5)  # Tightened range
+
+    # Adding labels and title
+    plt.xlabel('Average Company Support for Remote Work', fontsize=12)
+    plt.ylabel('Satisfaction with Remote Work', fontsize=12)
+    plt.title('Company Support for Remote Work by Satisfaction Level', fontsize=14)
+
+    # Display the plot
+    plt.tight_layout()
+    plt.savefig("../figures/satisfaction_mentalhealth_barplots_2.jpeg", format="jpeg", dpi=300)
+    plt.show()
+
+    print('The graph above shows us people who are satisfied with remote work do receive more support from their company to work remotely, on average.')
+
+
+def work_type_productivity(df2_cleaned):
+    """
+    This function returns a table and a corresponding piechart: 
+    The table shows us the hours worked per week are essentially the same for all categories. If we assume hours worked per week is the amount of hours needed to complete the work, which is a reasonable assumption in the tech sector, the table demonstrates employees have the same efficiency and productivity no matter the type of work (remote, hybrid, or inperson).
+    """
+    worktype_productivity = df2_cleaned.groupby('work_type')[['number_of_virtual_meetings', 'hours_worked_per_week']].mean()
+    print('work type and productivity: ', worklocation_productivity)
+
+    # Calculate the total or average hours worked per work type
+    hours_distribution = df2_cleaned.groupby('work_type')['hours_worked_per_week'].sum()
+
+    # Create a pie chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(hours_distribution, labels=hours_distribution.index, autopct='%1.1f%%', startangle=90, colors=sb.color_palette('Purples'))
+    plt.title('Proportion of Total Hours Worked by Work Type')
+    plt.savefig("../figures/work_type_productivity_piechart.jpeg", format="jpeg", dpi=300)
+    plt.show()
+
+    print('the table above shows us the hours worked per week are essentially the same for all categories. If we assume hours worked per week is the amount of hours needed to complete the work, which is a reasonable assumption in the tech sector, the table demonstrates employees have the same efficiency and productivity no matter the type of work (remote, hybrid, or inperson).')
+
+
+def stress_worktype_rel(df2_cleaned):
+    """
+    Displaying correlation between stress levels (low, medium, high) and work type (remote, hybrid, onsite)
+    """
+    
+    df_stress = df2_cleaned.groupby("stress_level")["work_type"].apply(lambda x: (x.value_counts(normalize=True) * 100))
+    df_stress = df_stress.unstack()
+    df_stress.columns = ['Remote', 'Hybrid', 'Onsite']
+    row_order = ['Low', 'Medium', 'High']
+    df_stress = df_stress.loc[row_order]
+    df_stress['Total'] = df_stress.sum(axis=1)
+    df_stress = df_stress.round({'Remote':2, 'Hybrid':2, 'Onsite':2})
+   
+    return df_stress
+
+def stress_jobrole_rel(df2_cleaned):
+    """
+    Displaying correlation between stress levels (low, medium, high) and job role (Data Scientist, Project Manager, Software Engineer)
+    """
+    df_stress = df2_cleaned.groupby("stress_level")["job_role"].apply(lambda x: (x.value_counts(normalize=True) * 100))
+    df_stress = df_stress.unstack()
+    row_order = ['Low', 'Medium', 'High']
+    df_stress = df_stress.loc[row_order]
+    df_stress['Total'] = df_stress.sum(axis=1)
+    df_stress = df_stress.round({'Data Scientist':2, 'Project Manager':2, 'Software Engineer':2})
+   
+    return df_stress
+
+def descriptive_statistics_hours_worked(df2_cleaned):
+    """
+    Displaying descriptive statistics (mean, median, min, max) for several separate colums:
+    1. hours_worked_per_week
+    2. number_of_virtual_meetings
+    3. work_life_balance_rating	
+    4. company_support_for_remote_work
+    """
+    
+    df_stats_hours_worked = df2_cleaned.groupby("work_type")[["hours_worked_per_week"]].agg(["mean", "median", "min", "max"]).reset_index()
+    df_stats_hours_worked[("hours_worked_per_week", "mean")] = df_stats_hours_worked[("hours_worked_per_week", "mean")].round(2)
+    print(df_stats_hours_worked)
+
+    df_stats_virtual_meetings = df2_cleaned.groupby("work_type")[["number_of_virtual_meetings"]].agg(["mean", "median", "min", "max"]).reset_index()
+    df_stats_virtual_meetings[("number_of_virtual_meetings", "mean")] = df_stats_virtual_meetings[("number_of_virtual_meetings", "mean")].round(2)
+    print(df_stats_virtual_meetings)
+
+    df_stats_work_life = df2_cleaned.groupby("work_type")[["work_life_balance_rating"]].agg(["mean", "median", "min", "max"]).reset_index()
+    df_stats_work_life[("work_life_balance_rating", "mean")] = df_stats_work_life[("work_life_balance_rating", "mean")].round(2)
+    print(df_stats_work_life)
+
+    df_stats_company_support = df2_cleaned.groupby("work_type")[["company_support_for_remote_work"]].agg(["mean", "median", "min", "max"]).reset_index()
+    df_stats_company_support[("company_support_for_remote_work", "mean")] = df_stats_company_support[("company_support_for_remote_work", "mean")].round(2)
+    print(df_stats_company_support)
+            
