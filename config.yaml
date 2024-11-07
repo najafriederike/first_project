@@ -5,4 +5,3 @@ input_data:
 output_data:
   productivity_file: '../data/clean/df_cleaned.csv'
   mental_health_file: '../data/clean/cleaned_mentalhealth_data.csv'
-
