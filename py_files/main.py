@@ -52,3 +52,19 @@ plot_average_scores_by_work_type(df_cleaned, 'work_type')
 plot_scores_by_work_type(df_cleaned)
 
 heat_map(df_cleaned)
+
+
+# Mental Health Dataset
+
+
+df2_cleaned = df_mentalhealth_cleaning(df2)
+
+satisfaction_mentalhealth(df2_cleaned)
+
+work_type_productivity(df2_cleaned)
+
+stress_worktype_rel(df2_cleaned)
+
+stress_jobrole_rel(df2_cleaned)
+
+descriptive_statistics_hours_worked(df2_cleaned)
