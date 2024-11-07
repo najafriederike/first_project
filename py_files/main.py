@@ -5,6 +5,7 @@ import numpy as np
 import yaml
 
 from functions import cleaning_productivity_data, describe_work_type_stats, plot_work_type_distribution, plot_stacked_work_and_overtime_hours, calculate_avg_median_scores_by_work_type, plot_average_scores_by_work_type, plot_scores_by_work_type
+
 #opens yaml file
 try:
     with open("../config.yaml") as file:
@@ -17,9 +18,9 @@ df = pd.read_csv(config['input_data']['productivity_file'])
 
 df_cleaned = cleaning_productivity_data(df)
 
+df_cleaned.to_csv(config['output_data']['productivity_file'], index=False)
 
 describe_stats = describe_work_type_stats(df_cleaned)
-
 
 '''
 Interpretation of descriptive stats:
@@ -39,7 +40,7 @@ Conclusion:
 Work type doesn’t show significant differences in productivity, satisfaction or motivation. We can infer if a company has a strong digital infrastructure and if they can provide equal access to resources, work environments do not matter.
 '''
 
-counts = plot_work_type_distribution(df_cleaned, 'work_type')
+plot_work_type_distribution(df_cleaned, 'work_type')
 
 plot_stacked_work_and_overtime_hours(df_cleaned)
 
@@ -48,3 +49,5 @@ pivot_avg_scores = calculate_avg_median_scores_by_work_type(df_cleaned)
 plot_average_scores_by_work_type(df_cleaned, 'work_type')
 
 plot_scores_by_work_type(df_cleaned)
+
+heat_map(df_cleaned)
