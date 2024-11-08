@@ -450,13 +450,12 @@ def df_mentalhealth_cleaning(df2):
 
 
 def satisfaction_mentalhealth():
-   """
-   This function returns one table and two barplots:
-   1. In the table we can see that people who are satisfied with remote work do receive slightly higher company support for remote work, and feel a little more socially isolated than people who feel unsatisfied with remote work (0.03 diff).
-   2. The first barplot tells us that satisfied remote workers do feel a little more socially isolated, although that can be interpreted as a tradeoff they are willing to assume.
-   3. The second barplot shows us people who are satisfied with remote work do receive more support from their company to work remotely, on average.
-   
-   """
+    """
+    This function returns one table and two barplots:
+    1. In the table we can see that people who are satisfied with remote work do receive slightly higher company support for remote work, and feel a little more socially isolated than people who feel unsatisfied with remote work (0.03 diff).
+    2. The first barplot tells us that satisfied remote workers do feel a little more socially isolated, although that can be interpreted as a tradeoff they are willing to assume.
+    3. The second barplot shows us people who are satisfied with remote work do receive more support from their company to work remotely, on average.
+    """
     remotework_satisfaction = df2_cleaned.groupby('satisfaction_with_remote_work')[['company_support_for_remote_work', 'social_isolation_rating']].mean()
     print('satisfaction level with remote work: ', remotework_satisfaction)
 
